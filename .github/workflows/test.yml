@@ -19,6 +19,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: docker/login-action@v1.9.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - uses: ./
         with:
-          milliseconds: 1000
+         src: docker.io/node:16
+         destinations: |
+          docker.io/u4ic/test-node:node-16
+          docker.io/u4ic/test-node:latest
+          docker.io/u4ic/test-node2:latest
+

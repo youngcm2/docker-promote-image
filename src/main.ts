@@ -1,44 +1,55 @@
 import * as core from '@actions/core'
 import {exec} from './exec'
-import { asyncForEach } from "./utils";
-import { getInputs, getPullArgs, getPushArgs, getTagArgs, Inputs } from "./context";
+import {asyncForEach} from './utils'
+import {
+  getInputs,
+  getPullArgs,
+  getPushArgs,
+  getTagArgs,
+  Inputs
+} from './context'
 
 async function run(): Promise<void> {
   try {
-    core.startGroup(`Docker info`);
-    await exec('docker', ['version']);
-    await exec('docker', ['info']);
-    core.endGroup();
+    core.startGroup(`Docker info`)
+    await exec('docker', ['version'])
+    await exec('docker', ['info'])
+    core.endGroup()
 
-    let inputs: Inputs = await getInputs();
+    const inputs: Inputs = await getInputs()
 
-    await asyncForEach(inputs.destinations, async (destination: string)=>{
-      core.info(`Pulling...`);
+    await asyncForEach(inputs.destinations, async (destination: string) => {
+      core.info(`Pulling...`)
 
-      const pullArgs = await getPullArgs(inputs.src);
+      const pullArgs = await getPullArgs(inputs.src)
 
-      await exec('docker', pullArgs).then(res => {
-        if (res.stderr != '' && !res.success) {
-          throw new Error(`docker call failed with: ${res.stderr.match(/(.*)\s*$/)![0]}`);
-        }
-      });
+      let res = await exec('docker', pullArgs)
 
-      const tagArgs = await getTagArgs(inputs.src, destination);
+      if (res.stderr !== '' && !res.success) {
+        throw new Error(
+          `docker call failed with: ${res.stderr.match(/(.*)\s*$/)![0]}`
+        )
+      }
 
-      await exec('docker', tagArgs).then(res => {
-        if (res.stderr != '' && !res.success) {
-          throw new Error(`docker call failed with: ${res.stderr.match(/(.*)\s*$/)![0]}`);
-        }
-      });
+      const tagArgs = await getTagArgs(inputs.src, destination)
 
-      const pushArgs = await getPushArgs(destination);
+      res = await exec('docker', tagArgs)
 
-      await exec('docker', pushArgs).then(res => {
-        if (res.stderr != '' && !res.success) {
-          throw new Error(`docker call failed with: ${res.stderr.match(/(.*)\s*$/)![0]}`);
-        }
-      });
-    });
+      if (res.stderr !== '' && !res.success) {
+        throw new Error(
+          `docker call failed with: ${res.stderr.match(/(.*)\s*$/)![0]}`
+        )
+      }
+
+      const pushArgs = await getPushArgs(destination)
+
+      res = await exec('docker', pushArgs)
+      if (res.stderr !== '' && !res.success) {
+        throw new Error(
+          `docker call failed with: ${res.stderr.match(/(.*)\s*$/)![0]}`
+        )
+      }
+    })
   } catch (error) {
     core.setFailed(error.message)
   }
