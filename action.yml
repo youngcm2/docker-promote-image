@@ -1,11 +1,13 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Promote Docker Images'
+description: 'Adds the ability to re-tag and promote docker images'
+author: 'Swimlane'
 inputs:
-  milliseconds: # change this
+  src:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'The source image {registry}/{image}:{tag}'
+  destinations:
+    required: true
+    description: 'List of all the destinations images {registry}/{image}:{tag}'
 runs:
   using: 'node12'
   main: 'dist/index.js'

@@ -1,16 +1,44 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import {exec} from './exec'
+import { asyncForEach } from "./utils";
+import { getInputs, getPullArgs, getPushArgs, getTagArgs, Inputs } from "./context";
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    core.startGroup(`Docker info`);
+    await exec('docker', ['version']);
+    await exec('docker', ['info']);
+    core.endGroup();
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    let inputs: Inputs = await getInputs();
 
-    core.setOutput('time', new Date().toTimeString())
+    await asyncForEach(inputs.destinations, async (destination: string)=>{
+      core.info(`Pulling...`);
+
+      const pullArgs = await getPullArgs(inputs.src);
+
+      await exec('docker', pullArgs).then(res => {
+        if (res.stderr != '' && !res.success) {
+          throw new Error(`docker call failed with: ${res.stderr.match(/(.*)\s*$/)![0]}`);
+        }
+      });
+
+      const tagArgs = await getTagArgs(inputs.src, destination);
+
+      await exec('docker', tagArgs).then(res => {
+        if (res.stderr != '' && !res.success) {
+          throw new Error(`docker call failed with: ${res.stderr.match(/(.*)\s*$/)![0]}`);
+        }
+      });
+
+      const pushArgs = await getPushArgs(destination);
+
+      await exec('docker', pushArgs).then(res => {
+        if (res.stderr != '' && !res.success) {
+          throw new Error(`docker call failed with: ${res.stderr.match(/(.*)\s*$/)![0]}`);
+        }
+      });
+    });
   } catch (error) {
     core.setFailed(error.message)
   }
