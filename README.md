@@ -25,7 +25,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - uses: youngcm2/docker-promote-image@v1.0.0
+      - uses: euhporicsystems/docker-promote-image@v1.0.0
         with:
          src: docker.io/node:16
          destinations: |
@@ -61,7 +61,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - uses: youngcm2/docker-promote-image@v1.0.0
+      - uses: euhporicsystems/docker-promote-image@v1.0.0
         with:
          src: docker.io/node:16
          destinations: |

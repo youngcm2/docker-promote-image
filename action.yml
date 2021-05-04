@@ -1,6 +1,9 @@
 name: 'Promote Docker Images'
 description: 'Adds the ability to re-tag and promote docker images'
 author: 'Swimlane'
+branding:
+  icon: 'anchor'
+  color: 'blue'
 inputs:
   src:
     required: true
