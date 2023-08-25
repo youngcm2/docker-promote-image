@@ -1,4 +1,4 @@
-import csvparse from 'csv-parse/lib/sync'
+import {parse} from 'csv-parse/sync'
 import * as core from '@actions/core'
 import {issueCommand} from '@actions/core/lib/command'
 
@@ -7,14 +7,14 @@ export interface Inputs {
   destinations: string[]
 }
 
-export async function getInputs(): Promise<Inputs> {
+export function getInputs(): Inputs {
   return {
     src: core.getInput('src'),
-    destinations: await getInputList('destinations')
+    destinations: getInputList('destinations')
   }
 }
 
-export async function getPullArgs(src: string): Promise<string[]> {
+export function getPullArgs(src: string): string[] {
   const args: string[] = ['pull']
 
   args.push(src)
@@ -22,10 +22,7 @@ export async function getPullArgs(src: string): Promise<string[]> {
   return args
 }
 
-export async function getTagArgs(
-  src: string,
-  destination: string
-): Promise<string[]> {
+export function getTagArgs(src: string, destination: string): string[] {
   const args: string[] = ['tag']
   if (src) {
     args.push(src)
@@ -36,7 +33,7 @@ export async function getTagArgs(
   return args
 }
 
-export async function getPushArgs(destination: string): Promise<string[]> {
+export function getPushArgs(destination: string): string[] {
   const args: string[] = ['push']
 
   args.push(destination)
@@ -44,10 +41,7 @@ export async function getPushArgs(destination: string): Promise<string[]> {
   return args
 }
 
-export async function getInputList(
-  name: string,
-  ignoreComma?: boolean
-): Promise<string[]> {
+export function getInputList(name: string, ignoreComma?: boolean): string[] {
   const res: string[] = []
 
   const items = core.getInput(name)
@@ -55,11 +49,13 @@ export async function getInputList(
     return res
   }
 
-  for (const output of (await csvparse(items, {
+  const outputs = parse(items, {
     columns: false,
     relaxColumnCount: true,
-    skipLinesWithEmptyValues: true
-  })) as string[][]) {
+    skipRecordsWithEmptyValues: true
+  }) as string[][]
+
+  for (const output of outputs) {
     if (output.length === 1) {
       res.push(output[0])
       continue

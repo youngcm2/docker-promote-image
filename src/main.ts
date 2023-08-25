@@ -16,12 +16,12 @@ async function run(): Promise<void> {
     await exec('docker', ['info'])
     core.endGroup()
 
-    const inputs: Inputs = await getInputs()
+    const inputs: Inputs = getInputs()
 
     await asyncForEach(inputs.destinations, async (destination: string) => {
       core.info(`Pulling...`)
 
-      const pullArgs = await getPullArgs(inputs.src)
+      const pullArgs = getPullArgs(inputs.src)
 
       let res = await exec('docker', pullArgs)
 
@@ -31,7 +31,7 @@ async function run(): Promise<void> {
         )
       }
 
-      const tagArgs = await getTagArgs(inputs.src, destination)
+      const tagArgs = getTagArgs(inputs.src, destination)
 
       res = await exec('docker', tagArgs)
 
@@ -41,7 +41,7 @@ async function run(): Promise<void> {
         )
       }
 
-      const pushArgs = await getPushArgs(destination)
+      const pushArgs = getPushArgs(destination)
 
       res = await exec('docker', pushArgs)
       if (res.stderr !== '' && !res.success) {
@@ -50,9 +50,12 @@ async function run(): Promise<void> {
         )
       }
     })
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
     core.setFailed(error.message)
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 run()
