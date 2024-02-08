@@ -1,10 +1,9 @@
-name: 'build-test'
+name: 'build-test-ci'
 on: # rebuild any PRs and main branch changes
-  pull_request:
   push:
-    branches:
-      - main
-      - 'releases/*'
+      branches-ignore:
+        - "release-please-**"
+        - "main"
 
 jobs:
   build: # make sure build/ci work properly
@@ -25,8 +24,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - uses: ./
         with:
-          src: docker.io/node:16
+          src: docker.io/node:20
           destinations: |
-            docker.io/u4ic/test-node:node-16
+            docker.io/u4ic/test-node:node-20
             docker.io/u4ic/test-node:latest
             docker.io/u4ic/test-node2:latest

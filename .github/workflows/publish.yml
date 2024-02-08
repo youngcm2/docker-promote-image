@@ -1,0 +1,50 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Force publish
+        required: true
+        type: boolean
+        default: true
+  push:
+    branches:
+      - main
+
+permissions:
+    contents: write # for checkout and tag
+    actions: write # updating envs
+    pull-requests: write # for comments
+    packages: write # for publish
+    id-token: write
+
+jobs:
+  release-prep:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      semver: ${{steps.release.outputs.major}}.${{steps.release.outputs.minor}}.${{steps.release.outputs.patch}}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Commit Linter
+        uses: wagoid/commitlint-github-action@v5
+
+      - uses: tibdex/github-app-token@v2
+        id: get_installation_token
+        with:
+            app_id: ${{ secrets.GH_APP_ID }}
+            private_key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+
+      - uses: google-github-actions/release-please-action@v4
+        name: release-please
+        id: release
+        with:
+          token: ${{ steps.get_installation_token.outputs.token }}
+          command: manifest
+          config-file: .github/release-please-config.json
+          manifest-file: .github/release-please-manifest.json
+
