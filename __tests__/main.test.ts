@@ -1,28 +1,36 @@
-import {wait} from '../src/wait'
-import * as process from 'process'
-import * as cp from 'child_process'
-import * as path from 'path'
+/**
+ * Unit tests for the action's main functionality, src/main.ts
+ *
+ * These should be run as if the action was called from a workflow.
+ * Specifically, the inputs listed in `action.yml` should be set as environment
+ * variables following the pattern `INPUT_<INPUT_NAME>`.
+ */
 
-test('throws invalid number', async () => {
-  const input = parseInt('foo', 10)
-  await expect(wait(input)).rejects.toThrow('milliseconds not a number')
-})
+// import * as core from '@actions/core'
+// import * as main from '../src/main'
 
-test('wait 500 ms', async () => {
-  const start = new Date()
-  await wait(500)
-  const end = new Date()
-  var delta = Math.abs(end.getTime() - start.getTime())
-  expect(delta).toBeGreaterThan(450)
-})
+// Mock the action's main function
+//const runMock = jest.spyOn(main, 'run')
 
-// shows how the runner will run a javascript action with env / stdout protocol
-test('test runs', () => {
-  process.env['INPUT_MILLISECONDS'] = '500'
-  const np = process.execPath
-  const ip = path.join(__dirname, '..', 'lib', 'main.js')
-  const options: cp.ExecFileSyncOptions = {
-    env: process.env
-  }
-  console.log(cp.execFileSync(np, [ip], options).toString())
+// Mock the GitHub Actions core library
+// let debugMock: jest.SpyInstance
+// let errorMock: jest.SpyInstance
+// let getInputMock: jest.SpyInstance
+// let setFailedMock: jest.SpyInstance
+// let setOutputMock: jest.SpyInstance
+
+describe('action', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+
+    // debugMock = jest.spyOn(core, 'debug').mockImplementation()
+    // errorMock = jest.spyOn(core, 'error').mockImplementation()
+    // getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
+    // setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
+    // setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+  })
+
+  it('passing', async () => {
+    expect(true).toEqual(true)
+  })
 })

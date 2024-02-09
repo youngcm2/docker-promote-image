@@ -12,5 +12,5 @@ inputs:
     required: true
     description: 'List of all the destinations images {registry}/{image}:{tag}'
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: node20
+  main: dist/index.js
