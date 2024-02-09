@@ -1,15 +1,19 @@
-# About
+# Docker Promote Image
+
+## About
+
 GitHub Action to promote or re-tag Docker image with other tags.
- - [x] Same Repository
- - [x] Different Repositories
- - [x] Multiple Different Repositories
- - [x] Same Repository (Private)
- - [x] Different Repositories (Private)
- - [x] Multiple Different Repositories (Private)
 
-# Examples
+- [x] Same Repository
+- [x] Different Repositories
+- [x] Multiple Different Repositories
+- [x] Same Repository (Private)
+- [x] Different Repositories (Private)
+- [x] Multiple Different Repositories (Private)
 
-## Same repository
+## Examples
+
+### Same repository
 
 ```yaml
 name: 'promote image'
@@ -36,7 +40,7 @@ jobs:
 
 ```
 
-## Different/Multiple Repositories
+### Different/Multiple Repositories
 
 ```yaml
 name: 'promote image'

@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
-import {exec} from './exec'
-import {asyncForEach} from './utils'
+import { exec } from './exec'
+import { asyncForEach } from './utils'
 import {
   getInputs,
   getPullArgs,
@@ -9,7 +9,7 @@ import {
   Inputs
 } from './context'
 
-async function run(): Promise<void> {
+export async function run(): Promise<void> {
   try {
     core.startGroup(`Docker info`)
     await exec('docker', ['version'])

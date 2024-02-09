@@ -1,5 +1,5 @@
 import * as aexec from '@actions/exec'
-import {ExecOptions} from '@actions/exec'
+import { ExecOptions } from '@actions/exec'
 
 export interface ExecResult {
   success: boolean
