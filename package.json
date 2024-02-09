@@ -1,7 +1,7 @@
 {
   "name": "docker-promote-image",
   "description": "GitHub Actions to promote docker images",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "author": "",
   "private": true,
   "homepage": "https://github.com/euphoricsystems/docker-promote-image",
