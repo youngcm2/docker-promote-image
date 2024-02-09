@@ -1,13 +1,9 @@
 name: Lint Codebase
 
 on:
-  pull_request:
+  push:
     branches-ignore:
       - "release-please-**"
-      - 
-  push:
-    branches:
-      - main
 
 permissions:
   contents: read
