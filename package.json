@@ -1,7 +1,7 @@
 {
   "name": "docker-promote-image",
   "description": "GitHub Actions to promote docker images",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": "",
   "private": true,
   "homepage": "https://github.com/euphoricsystems/docker-promote-image",
@@ -98,7 +98,5 @@
     "typescript": "5.3.3",
     "yaml-lint": "1.7.0"
   },
-  "eslintConfig": {
-
-  }
+  "eslintConfig": {}
 }
