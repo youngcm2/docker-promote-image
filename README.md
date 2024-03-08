@@ -29,7 +29,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - uses: euhporicsystems/docker-promote-image@v1.0.0
+      - uses: euphoricsystems/docker-promote-image@v2
         with:
          src: docker.io/node:16
          destinations: |
@@ -65,7 +65,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - uses: euhporicsystems/docker-promote-image@v1.0.0
+      - uses: euphoricsystems/docker-promote-image@v2
         with:
          src: docker.io/node:16
          destinations: |
